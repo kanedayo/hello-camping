@@ -1,0 +1,2 @@
+require './nuts'
+run Nuts

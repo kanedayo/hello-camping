@@ -1,0 +1,15 @@
+#http://stackoverflow.com/questions/19773051/rails-app-works-fine-locally-but-heroku-gives-application-error
+#https://devcenter.heroku.com/articles/concurrency-and-database-connections
+
+worker_processes Integer(ENV["WEB_CONCURRENCY"] || 3)
+timeout 15
+
+before_fork do |server, worker|
+  defined?(ActiveRecord::Base) and
+    ActiveRecord::Base.connection.disconnect!
+end
+
+after_fork do |server, worker|
+  defined?(ActiveRecord::Base) and
+    ActiveRecord::Base.establish_connection
+end
